@@ -586,8 +586,8 @@ def build_fig5(countries):
 # ─────────────────────────────────────────────────────────────────────────────
 # DASH APP
 # ─────────────────────────────────────────────────────────────────────────────
-app = Dash(__name__, suppress_callback_exceptions=True)
-server = app.server   # ← WSGI entry point for Vercel / Gunicorn
+dash_app = Dash(__name__, suppress_callback_exceptions=True)
+server = dash_app.server   # ← WSGI entry point for Vercel / Gunicorn
 
 _tab  = dict(padding="8px 18px", fontFamily="Arial", fontSize="13px",
              color=SLATE, backgroundColor="white", borderBottom="2px solid #E8E8E8")
@@ -616,7 +616,7 @@ def _status_legend_div():
     )
 
 
-app.layout = html.Div([
+dash_app.layout = html.Div([
     html.Div([
         html.H2("CO₂ Emissions & Life Satisfaction",
                 style={"margin": "0", "color": "white", "fontFamily": "Arial",
@@ -641,7 +641,7 @@ _desc = dict(fontFamily="Arial", fontSize="12px", color="#666",
              marginBottom="10px", lineHeight="1.5")
 
 
-@app.callback(Output("tab-content", "children"), Input("tabs", "value"))
+@dash_app.callback(Output("tab-content", "children"), Input("tabs", "value"))
 def render_tab(tab):
     if tab == "v1":
         return html.Div([
@@ -722,13 +722,13 @@ def render_tab(tab):
     return html.Div("Select a tab.", style={"fontFamily": "Arial", "color": SLATE})
 
 
-@app.callback(Output("v2-graph", "figure"),
+@dash_app.callback(Output("v2-graph", "figure"),
               Input("v2-region", "value"), Input("v2-year", "value"))
 def update_v2(region, year):
     return build_fig2(year, region)
 
 
-@app.callback(Output("fig3-graph", "figure"), Output("v3-mask-local", "data"),
+@dash_app.callback(Output("fig3-graph", "figure"), Output("v3-mask-local", "data"),
               Input("fig3-graph", "clickData"),
               State("fig3-graph", "figure"), State("v3-mask-local", "data"),
               prevent_initial_call=True)
@@ -764,13 +764,13 @@ def toggle_feature(click_data, current_fig, mask_json):
     return fig, _json.dumps(active_mask)
 
 
-@app.callback(Output("fig4-graph", "figure"), Input("eff-slider", "value"),
+@dash_app.callback(Output("fig4-graph", "figure"), Input("eff-slider", "value"),
               prevent_initial_call=True)
 def update_v4(min_pct):
     return build_fig4(min_pct)
 
 
-@app.callback(Output("fig5-graph", "figure"), Input("v5-region", "value"),
+@dash_app.callback(Output("fig5-graph", "figure"), Input("v5-region", "value"),
               prevent_initial_call=True)
 def update_v5(selected_region):
     if selected_region in (None, "All", "World"):
@@ -784,4 +784,4 @@ def update_v5(selected_region):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8050)
+    dash_app.run(debug=True, port=8050)
