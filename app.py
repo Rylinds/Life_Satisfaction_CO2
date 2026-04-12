@@ -1,6 +1,6 @@
 """
-app.py — Vercel entry point for the CO₂ & Life Satisfaction Dashboard
-----------------------------------------------------------------------
+app.py — Vercel entry point for the CO2 & Life Satisfaction Dashboard
+
 Repository layout expected:
   app.py
   requirements.txt
@@ -8,9 +8,10 @@ Repository layout expected:
   data/
     co2-emissions-per-capita.csv
     WHR25_Data_Figure_2.1v3.xlsx
+  other ipynbs...
 
 Vercel runs this module as a WSGI app via @vercel/python.
-The `server` variable (Flask instance) is the WSGI callable.
+The `app` variable (Flask instance) is the WSGI callable.
 """
 
 import os, copy, json as _json, warnings
@@ -27,16 +28,14 @@ from dash import Dash, dcc, html, Input, Output, State, no_update
 
 warnings.filterwarnings("ignore")
 
-# ── Data paths (relative to this file) ───────────────────────────────────────
+# DATA PATHS
 _HERE     = os.path.dirname(os.path.abspath(__file__))
 _DATA_DIR = os.path.join(_HERE, "data")
 
 CO2_CSV   = os.path.join(_DATA_DIR, "co2-emissions-per-capita.csv")
 WHR_XLSX  = os.path.join(_DATA_DIR, "WHR25_Data_Figure_2.1v3.xlsx")
 
-# ─────────────────────────────────────────────────────────────────────────────
 # COLOUR PALETTE
-# ─────────────────────────────────────────────────────────────────────────────
 CORAL       = "#E8734A"
 TEAL        = "#1A9C87"
 TEAL_LIGHT  = "#A8D5CF"
@@ -73,9 +72,7 @@ PLOT_DEFAULTS = dict(
     font=dict(family="Arial", size=12, color=SLATE),
 )
 
-# ─────────────────────────────────────────────────────────────────────────────
 # DATA LOADING  (runs once at cold start)
-# ─────────────────────────────────────────────────────────────────────────────
 def _load_data():
     KEEP_COLS = [
         "Year", "Country name", "Life evaluation (3-year average)",
@@ -163,9 +160,7 @@ def _load_data():
 
 merged = _load_data()
 
-# ─────────────────────────────────────────────────────────────────────────────
 # V1 — Gaussian fit
-# ─────────────────────────────────────────────────────────────────────────────
 def gaussian_logx(x, a, b, c, d):
     return a * np.exp(-((np.log(x) - b) ** 2) / (2 * c ** 2)) + d
 
@@ -247,9 +242,7 @@ def build_fig1():
     return fig
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # V2 — Region-filtered dual choropleth
-# ─────────────────────────────────────────────────────────────────────────────
 REGION_SCOPE = {
     "World": "world", "Africa": "africa", "Americas": "world",
     "Asia-Pacific": "asia", "Europe": "europe", "Middle East": "asia",
@@ -309,9 +302,7 @@ def build_fig2(year=2022, region="World"):
     return fig
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # V3 — Model comparison panel
-# ─────────────────────────────────────────────────────────────────────────────
 FEATURES = [
     "Explained by: Log GDP per capita", "Explained by: Social support",
     "Explained by: Healthy life expectancy", "Explained by: Freedom to make life choices",
@@ -431,9 +422,7 @@ def build_fig3():
     return fig
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# V4 — CO₂ Efficiency scatter
-# ─────────────────────────────────────────────────────────────────────────────
+# V4 — CO2 Efficiency scatter
 df_2022 = merged[merged["Year"] == 2022].copy()
 df_2022 = df_2022[df_2022["co2_per_capita"] > 0].dropna(
     subset=["life_satisfaction", "co2_per_capita"])
@@ -497,9 +486,7 @@ def build_fig4(min_pct=0):
     return fig
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # V5 — Decoupling trends
-# ─────────────────────────────────────────────────────────────────────────────
 df_decade = (merged[merged["Year"].between(2014, 2024)]
              .dropna(subset=["co2_per_capita", "life_satisfaction"]).copy())
 
@@ -583,11 +570,9 @@ def build_fig5(countries):
     return fig
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # DASH APP
-# ─────────────────────────────────────────────────────────────────────────────
 dash_app = Dash(__name__, suppress_callback_exceptions=True)
-app = dash_app.server   # ← WSGI entry point for Vercel / Gunicorn
+app = dash_app.server   # WSGI entry point for Vercel / Gunicorn
 
 _tab  = dict(padding="8px 18px", fontFamily="Arial", fontSize="13px",
              color=SLATE, backgroundColor="white", borderBottom="2px solid #E8E8E8")
