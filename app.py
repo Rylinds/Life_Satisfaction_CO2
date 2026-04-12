@@ -587,7 +587,7 @@ def build_fig5(countries):
 # DASH APP
 # ─────────────────────────────────────────────────────────────────────────────
 dash_app = Dash(__name__, suppress_callback_exceptions=True)
-server = dash_app.server   # ← WSGI entry point for Vercel / Gunicorn
+app = dash_app.server   # ← WSGI entry point for Vercel / Gunicorn
 
 _tab  = dict(padding="8px 18px", fontFamily="Arial", fontSize="13px",
              color=SLATE, backgroundColor="white", borderBottom="2px solid #E8E8E8")
@@ -784,4 +784,4 @@ def update_v5(selected_region):
 
 
 if __name__ == "__main__":
-    dash_app.run(debug=True, port=8050)
+    dash_app.run(debug=True)
