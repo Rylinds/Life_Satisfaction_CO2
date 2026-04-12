@@ -224,7 +224,7 @@ def build_fig1():
                  bgcolor="rgba(255,255,255,0.88)", bordercolor="#CCCCCC", borderwidth=1,
                  font=dict(size=11, family="Arial")),
             dict(text=f"Peak ≈ {peak_co2:.1f} t/person",
-                 x=np.log10(peak_co2), y=peak_y + 0.35,
+                 x=np.log10(peak_co2), y=peak_y + 0.55,
                  xref="x", yref="y", showarrow=True, arrowhead=2, arrowcolor=SLATE,
                  ax=0, ay=-30, font=dict(size=10, color=SLATE)),
             dict(text="← Industrialisation phase",
@@ -295,8 +295,7 @@ def build_fig2(year=2022, region="World"):
         showscale=True, geo="geo2",
     ), row=1, col=2)
     geo_cfg = {**GEO_BASE, "scope": scope}
-    fig.update_geos(geo_cfg, geo="geo")
-    fig.update_geos(geo_cfg, geo="geo2")
+    fig.update_geos(patch=geo_cfg)
     fig.update_layout(**PLOT_DEFAULTS, height=460, width=1200,
                       margin=dict(l=10, r=10, t=70, b=20))
     return fig
