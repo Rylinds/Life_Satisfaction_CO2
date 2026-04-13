@@ -229,10 +229,10 @@ def build_fig1():
                  ax=0, ay=-30, font=dict(size=10, color=SLATE)),
             dict(text="← Industrialisation phase",
                  xref="paper", yref="paper", x=0.10, y=0.18,
-                 showarrow=False, font=dict(size=10, color="#777")),
+                 showarrow=False, font=dict(size=10, color=SLATE)),
             dict(text="Diminishing returns →",
                  xref="paper", yref="paper", x=0.70, y=0.95,
-                 showarrow=False, font=dict(size=10, color="#777")),
+                 showarrow=False, font=dict(size=10, color=SLATE)),
         ],
     )
     fig.update_xaxes(showgrid=True, gridcolor="#F2F2F2", zeroline=False)
@@ -291,7 +291,7 @@ def build_fig2(year=2022, region="World"):
         colorbar=dict(title="t/person", x=1.00, len=0.72, thickness=14,
                       tickvals=[np.log1p(v) for v in [0, 1, 3, 8, 20, 42]],
                       ticktext=["0","1","3","8","20","42"]),
-        hovertemplate="<b>%{text}</b><br>CO₂: %{customdata:.2f} t/person<extra></extra>",
+        hovertemplate="<b>%{text}</b><br>CO₂: %{customdata:.2f} tonnes/person<extra></extra>",
         showscale=True, geo="geo2",
     ), row=1, col=2)
     geo_cfg = {**GEO_BASE, "scope": scope}
@@ -359,7 +359,7 @@ def build_fig3():
         subplot_titles=[
             "<b>R² by Model</b>",
             "<b>Standardised Regression Coefficients</b><br>"
-            '<span style="font-size:11px">Click a bar to toggle — Multiple R² updates live</span>',
+            '<span style="font-size:11px">Click a bar to toggle</span>',
         ],
         column_widths=[0.40, 0.60], horizontal_spacing=0.14,
     )
@@ -386,15 +386,15 @@ def build_fig3():
                    error_x=dict(type="data", symmetric=False,
                                 array=[hi - c], arrayminus=[c - lo],
                                 color="#666", thickness=1.8, width=5),
-                   text=[f"{c:+.3f}"], textposition="outside",
-                   textfont=dict(size=11, color=SLATE), width=0.6,
+                   #text=[f"{c:+.3f}"], textposition="outside",
+                   #textfont=dict(size=11, color=SLATE), width=0.6,
                    hovertemplate=f"<b>{label}</b><br>β = {c:.3f}<br><i>Click to toggle</i><extra></extra>",
                    showlegend=False),
             row=1, col=2,
         )
     fig.add_vline(x=0, line_color="#BBBBBB", line_width=1.2, row=1, col=2)
     fig.add_hline(y=3.5, line_dash="dot", line_color="#888", line_width=1.5, row=1, col=2)
-    fig.add_annotation(xref="x2", yref="y2", x=0.2, y="CO₂ per capita",
+    fig.add_annotation(xref="x2", yref="y2", x=0.25, y="CO₂ per capita",
                        text="← Small independent effect", showarrow=False,
                        font=dict(size=10, color=CORAL, family="Arial"))
     fig.add_annotation(xref="paper", yref="y2", x=1.0, y=3.25,
@@ -445,7 +445,7 @@ avg_eff_val = float(df_2022["efficiency"].mean())
 x_fit_eff   = np.logspace(np.log10(df_2022["co2_per_capita"].min()),
                            np.log10(df_2022["co2_per_capita"].max()), 300)
 y_fit_eff   = reg_eff.predict(np.log10(x_fit_eff.reshape(-1, 1)))
-_EFF_OUTLIERS = ["Malawi", "Costa Rica", "Vietnam", "Norway", "United States", "Qatar"]
+#_EFF_OUTLIERS = ["Malawi", "Costa Rica", "Vietnam", "Norway", "United States", "Qatar"]
 
 
 def build_fig4(min_pct=0):
@@ -471,11 +471,11 @@ def build_fig4(min_pct=0):
                   annotation_text=f"Global avg = {avg_eff_val:.2f}",
                   annotation_position="bottom right",
                   annotation_font=dict(size=10, color="#666"))
-    for _, row in filtered[filtered["country"].isin(_EFF_OUTLIERS)].iterrows():
-        fig.add_annotation(x=row["co2_per_capita"], y=row["efficiency"],
-                           text=row["country"], showarrow=False,
-                           font=dict(size=9, color=SLATE),
-                           xanchor="left", yanchor="bottom", xshift=8)
+    #for _, row in filtered[filtered["country"].isin(_EFF_OUTLIERS)].iterrows():
+        #fig.add_annotation(x=row["co2_per_capita"], y=row["efficiency"],
+                           #text=row["country"], showarrow=False,
+                           #font=dict(size=9, color=SLATE),
+                           #xanchor="left", yanchor="bottom", xshift=8)
     fig.update_layout(**PLOT_DEFAULTS, margin=dict(l=70, r=160, t=90, b=60),
                       legend=dict(title=dict(text="<b>Efficiency Status</b>", font=dict(size=11)),
                                   x=1.01, y=1, bgcolor="rgba(255,255,255,0.9)",
@@ -688,14 +688,14 @@ def render_tab(tab):
     if tab == "v5":
         return html.Div([
             html.P("Base-year indexed trends (2014 = 100) for top emitters in the "
-                   "selected region. Teal = Happiness Index, Coral = Carbon Index.", style=_desc),
+                   "selected region.", style=_desc),
             _status_legend_div(),
             html.Div([
                 html.Label("Filter by region:",
                            style={"fontFamily": "Arial", "fontSize": "12px",
                                   "color": SLATE, "marginRight": "12px"}),
                 dcc.Dropdown(id="v5-region",
-                             options=["All"] + REGIONS_ALL,
+                             options=REGIONS_ALL,
                              value="All", clearable=False,
                              style={"width": "220px", "fontFamily": "Arial",
                                     "fontSize": "12px"}),
