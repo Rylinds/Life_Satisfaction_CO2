@@ -23,7 +23,7 @@ While the interactive dashboard focuses on temporal trends and correlation, this
 <em><strong>Figure 1:</strong> Data Synthesis—Ordering the top 20 per-capita emitters by GDP (y-axis) and Population (x-axis) to contextualize environmental impact against economic scale.</em>
 </p>
 
-####Design Philosophy
+**Design Philosophy**
 - **Dimensionality**: Unlike standard scatter plots, this visualization uses vertical and horizontal positioning to represent GDP and Population, allowing for an immediate "quadrant" analysis of economic efficiency vs. environmental cost.
 - **Visual Continuity**: The curved per-capita emission lines (2000–2023) mirror the "diminishing returns" identified in the Gaussian model of the Dash application.
 - **Tooling**: Data was pre-processed in Python, scaled for accuracy using Plotly/D3.js logic, and finalized in Figma to ensure maximum legibility and aesthetic impact.
