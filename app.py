@@ -552,20 +552,25 @@ def build_fig5(countries):
     fig.update_xaxes(showgrid=False, dtick=2,
                      tickvals=list(range(2014, 2025, 2)),
                      ticktext=[str(y) for y in range(2014, 2025, 2)])
+
+    def _color_ann(ann):
+        if '=' in ann.text and 'Index' not in ann.text: 
+            raw    = ann.text.split('=')[-1]
+            parts  = [p.strip() for p in raw.split('|')]
+            cname  = parts[0]
+            status = parts[1] if len(parts) > 1 else ''
+            ann.update(
+                text=f'<b>{cname}</b>',
+                font=dict(size=11, color=STATUS_COLORS.get(status, SLATE)),
+            )
+
+    fig.for_each_annotation(_color_ann)
+
     fig.add_annotation(text="Index (2014 = 100)", xref="paper", yref="paper",
-                       x=-0.055, y=0.5, textangle=-90, showarrow=False,
+                       x=-0.07, y=0.5, textangle=-90, showarrow=False,
                        font=dict(size=12, color=SLATE, family="Arial"))
     fig.add_hline(y=100, line_dash="dot", line_color="#BBBBBB", line_width=1.2)
 
-    def _colour_ann(ann):
-        raw    = ann.text.split("=")[-1]
-        parts  = [p.strip() for p in raw.split("|")]
-        cname  = parts[0]
-        status = parts[1] if len(parts) > 1 else ""
-        ann.update(text=f"<b>{cname}</b>",
-                   font=dict(size=11, color=STATUS_COLORS.get(status, SLATE)))
-
-    fig.for_each_annotation(_colour_ann)
     return fig
 
 
@@ -592,7 +597,7 @@ def _status_legend_div():
             html.Span(status, style={"marginRight": "16px"}),
         ]))
     return html.Div(
-        [html.Span("Facet title colour: ",
+        [html.Span("Facet title color: ",
                    style={"fontWeight": "bold", "marginRight": "8px"})] + items,
         style={"fontFamily": "Arial", "fontSize": "12px", "color": SLATE,
                "marginBottom": "10px", "display": "flex", "alignItems": "center",
@@ -605,7 +610,7 @@ dash_app.layout = html.Div([
         html.H2("CO₂ Emissions & Life Satisfaction",
                 style={"margin": "0", "color": "white", "fontFamily": "Arial",
                        "fontSize": "22px", "fontWeight": "bold"}),
-        html.P("Cross-National Analysis  |  2014–2024  |  Group 12",
+        html.P("Cross-National Analysis  |  2014–2024",
                style={"margin": "4px 0 0 0", "color": "rgba(255,255,255,0.75)",
                       "fontFamily": "Arial", "fontSize": "13px"}),
     ], style={"backgroundColor": TEAL, "padding": "18px 32px"}),
