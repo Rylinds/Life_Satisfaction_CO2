@@ -14,8 +14,6 @@ This project investigates whether national per-capita CO₂ emissions predict av
 
 ## Live Dashboard
 
-> Deploy to Vercel by following the instructions in the [Deployment](#deployment) section.
-
 The dashboard is a five-tab Dash application covering each argumentative step of the analysis:
 
 | Tab | Visual | Argument |
