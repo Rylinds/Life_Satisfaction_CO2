@@ -13,7 +13,7 @@ This project investigates whether national per-capita CO₂ emissions predict av
 ---
 
 ## Data Design & Information Communication
-Beyond statistical modeling, this project explores the intersection of Information Engineering and Artistic Information Design. To communicate the scale of global emissions effectively, I synthesized the analytical findings into a high-fidelity infographic created in Figma.
+Beyond statistical modeling, this project explores the intersection of Information Engineering and Artistic Information Design. To communicate the scale of global emissions effectively, analytical findings were synthesized into a high-fidelity infographic created in Figma.
 
 While the interactive dashboard focuses on temporal trends and correlation, this design provides a curated snapshot of the world's top 20 per-capita emitters.
 
